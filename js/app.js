@@ -44,29 +44,48 @@ var App = (function() {
     UI.init(); 
 
     // Set Settings
-    DB.createFiles(function(){  
+    DB.createFiles(function(){
+      DB.setChannelLinkAsync("/data/playlist.m3u\n");
       Settings.init(); 
     });  
-
-    tizen.systeminfo.getPropertyValue('DISPLAY', function(data) {
-      tv = {
-        width: data.resolutionWidth,
-        height: data.resolutionHeight
-      };   
-    }); 
-
-    
-    
   }  
 
   // Events
   document.addEventListener('DOMContentLoaded', onLoad);
 
+  document.addEventListener('visibilitychange', function() {
+    if (document.hidden) {
+      log("应用已进入后台");
+      if(Player.state=="PLAYING"){
+        Player.stop();
+      }
+    } else {
+      log("应用已恢复前台");
+    }
+  });
+
   
   // Return App API
   return {    
     get resolution(){
-      return  tv;
+      return (new Promise(function(resolve,reject){
+        try{
+          tizen.systeminfo.getPropertyValue('DISPLAY', function(data) {
+            tv = {
+              width: data.resolutionWidth,
+              height: data.resolutionHeight
+            };
+            resolve(tv);
+          },function(error) {
+            log("getPropertyValue error occurred " + error.message);
+            reject(false);
+          });
+        }
+        catch(error){
+          log(error.message);
+          reject(false);
+        }
+      }));
     },
     get keyEventListener(){ 
       return function(e) { 
@@ -140,7 +159,7 @@ var App = (function() {
               Player.mediaRewind();
               break;  
             case 38: // Up
-              //log('key: up');
+              log('key: up');
               if(UI.isExitPanelVisible){
                 UI.selectExitChoice(true);
               }
@@ -157,7 +176,7 @@ var App = (function() {
                 Player.prev(); 
               break;
             case 40: // Down
-              //log('key: down');
+              log('key: down');
               if(UI.isExitPanelVisible){
                 UI.selectExitChoice(false);
               }

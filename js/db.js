@@ -1,45 +1,30 @@
 var DB=(function(){
-    var dataDirectory="TabarekTV";
+    var dataDirectory="wgt-private/SamsungSmartTV-IPTV/";
     var log = new Logger('DB');
-    var dir; 
     return{
         createFiles:function (callback){
-            tizen.filesystem.resolve("documents",function(directory) {
-                var password,channelDataLinks,blacklistCategories,blacklistChannels;
-                try{
-                    dir = directory.createDirectory(dataDirectory); 
-                }catch(error){
-                    try {
-                        dir=directory.resolve(dataDirectory);
-                    } catch (error2) {
-                        log("code 1 : "+error+" -- 2: "+error2);
-                    } 
-                }  
-                try { 
-                    password = dir.createFile("password"); 
-                    DB.setAsync("password","00000");
-                } catch (error) {log("code 2 : "+error);}
+            var password,channelDataLinks,blacklistCategories,blacklistChannels;
+            try { 
+                password = tizen.filesystem.openFile(dataDirectory+"password","a"); 
+                DB.setAsync("password","00000");
+            } catch (error) {log("code 2 : "+error);}
 
-                try {
-                    channelDataLinks = dir.createFile("channelDataLinks");
-                } catch (error) {log("code 3 : "+error);}
+            try {
+                channelDataLinks = tizen.filesystem.openFile(dataDirectory+"channelDataLinks","a");
+            } catch (error) {log("code 3 : "+error);}
 
-                try {
-                    blacklistCategories= dir.createFile("blacklistCategories");
-                } catch (error) {log("code 4 : "+error);}
+            try {
+                blacklistCategories= tizen.filesystem.openFile(dataDirectory+"blacklistCategories","a");
+            } catch (error) {log("code 4 : "+error);}
 
-                try { 
-                    blacklistChannels= dir.createFile("blacklistChannels");
-                } catch (error) {log("code 5 : "+error);} 
+            try { 
+                blacklistChannels= tizen.filesystem.openFile(dataDirectory+"blacklistChannels","a");
+            } catch (error) {log("code 5 : "+error);} 
                 
-                if(callback)
-                    callback();
-                    
-            },function(error){log("code : 8"+error)});  
-        },  
-        
-        
+            if(callback)
+                 callback();
 
+        },
         
         setChannelLink:function (data,callback){ 
             this.set("channelDataLinks",data,callback);
@@ -82,121 +67,102 @@ var DB=(function(){
         },
         
 
-        get:function (filePath,callback){  
-            tizen.filesystem.resolve("documents/"+dataDirectory,function(dir) {
-                var file = dir.resolve(filePath);  
-                file.openStream("r",function(fs) {
-                    //try{ 
-                        var result="";
-                        if(file.fileSize>0)
-                            result=fs.read(file.fileSize);  
-                        fs.close();
-                        if(callback){
-                            //try {
-                                callback(result);    
-                            //} catch (error) {
-                                //log("code : 18 "+error);
-                           // } 
-                        }  
-                    //}catch(error){log("code : 9 "+error);}  
-                },function(error) {log("code : 10 "+ error.message);}, "UTF-8");
-
-            },function(error){log("code : 11 "+error);});     
+        get:function (filePath,callback){
+            try{
+                var file = tizen.filesystem.openFile(dataDirectory+filePath,"r");  
+                var result="";
+                result=file.readString();  
+                file.close();
+                if(callback){   
+                    callback(result);
+                }  
+            }
+            catch(error){
+                log("code : 11 "+error);
+            }
         }, 
         set:function (filePath,data,callback){  
-            tizen.filesystem.resolve("documents/"+dataDirectory,function(dir) {
-                var file = dir.resolve(filePath);  
-                file.openStream("w",function(fs) {
-                    try{
-                        fs.write(data);
-                        fs.close();
-                        if(callback){
-                            try {
-                                callback(true);    
-                            } catch (error) {
-                                log("code : 19 "+error);
-                            } 
-                        } 
-                    }catch(error){log("code : 12 "+error);} 
-                    
-                },function(error) {log("code : 13 "+ error.message);}, "UTF-8");
+            try{
+                var file = tizen.filesystem.openFile(dataDirectory+filePath,"w"); 
+                file.writeString(data);
+                file.close();
+                if(callback){
+                    try {
+                        callback(true);    
+                    } catch (error) {
+                        log("code : 19 "+error);
+                    } 
+                } 
+            }
+            catch(error){
+                log("code : 14 "+error);
+            }
 
-            },function(error){log("code : 14 "+error);});     
         }, 
         add:function (filePath,data,callback){  
-            tizen.filesystem.resolve("documents/"+dataDirectory,function(dir) {
-                var file = dir.resolve(filePath);  
-                file.openStream("a",function(fs) {
-                    try{ 
-                        fs.position=file.fileSize;
-                        fs.write(data); 
-                        fs.close();
-                        if(callback){
-                            try { 
-                                callback(true);    
-                            } catch (error) {
-                                log("code : 20 "+error);
-                            } 
-                        } 
-                    }catch(error){log("code : 15 "+error);} 
-                    
-                },function(error) {log("code : 16 "+ error.message);}, "UTF-8"); 
-
-            },function(error){log("code : 17 "+error);});     
+            try{
+                var file = tizen.filesystem.openFile(dataDirectory+filePath,"w"); 
+                file.seek(0, "END");
+                file.writeString(data);
+                file.close();
+                if(callback){
+                    try { 
+                        callback(true);    
+                    } catch (error) {
+                        log("code : 20 "+error);
+                    } 
+                } 
+            }
+            catch(error){
+                log("code : 17 "+error);
+            }
         }, 
 
         getAsync:  function (filePath){  
             return (new Promise(function(resolve,reject){
-                tizen.filesystem.resolve("documents/"+dataDirectory,function(dir) {
-                    var file = dir.resolve(filePath);  
-                    file.openStream("r",function(fs) {
-                        //try{ 
-                            var result="";
-                            if(file.fileSize>0)
-                                result=fs.read(file.fileSize);  
-                            fs.close();
-                            resolve(result); 
-                             
-                        //}catch(error){log("code : 9 "+error);}  
-                    },function(error) {log("code : 10 "+ error.message); reject(false)}, "UTF-8");
-    
-                },function(error){log("code : 11 "+error.message);reject(false)});     
+                try{
+                    var result="";
+                    var file = tizen.filesystem.openFile(dataDirectory+filePath,"r");
+                    result=file.readString();
+                    file.close();
+                    resolve(result); 
+                }
+                catch(error)
+                {
+                    log("code : 11 "+error.message);
+                    reject(false);
+                }
             })) ; 
         },
         
         setAsync:  function (filePath,data){  
             return (new Promise(function(resolve,reject){
-
-                tizen.filesystem.resolve("documents/"+dataDirectory,function(dir) {
-                    var file = dir.resolve(filePath);  
-                    file.openStream("w",function(fs) {
-                        try{
-                            fs.write(data); 
-                            fs.close();
-                            resolve(true); 
-                        }catch(error){log("code : 12 "+error);} 
-                        
-                    },function(error) {log("code : 13 "+ error.message);reject(false)}, "UTF-8");
-    
-                },function(error){log("code : 14 "+error);reject(false);});  
+                try{
+                    var file = tizen.filesystem.openFile(dataDirectory+filePath,"w");
+                    file.writeString(data);
+                    file.close();
+                    resolve(true);
+                }
+                catch(error){
+                    log("code : 14 "+error.message);
+                    reject(false);
+                }
             })) ; 
         },
         
         addAsync:  function (filePath,data){  
             return (new Promise(function(resolve,reject){ 
-                tizen.filesystem.resolve("documents/"+dataDirectory,function(dir) {
-                    var file = dir.resolve(filePath);  
-                    file.openStream("a",function(fs) {
-                        try{
-                            fs.position=file.fileSize;
-                            fs.write(data); 
-                            fs.close();
-                            resolve(true); 
-                        }catch(error){log("code : 15 "+error);} 
-                        
-                    },function(error) {log("code : 16 "+ error.message);reject(false);}, "UTF-8");
-    
-                },function(error){log("code : 17 "+error);reject(false);});  
+                try{
+                    var file = tizen.filesystem.openFile(dataDirectory+filePath,"w"); 
+                    file.seek(0, "END");
+                    file.writeString(data);
+                    file.close();
+                    resolve(true);
+                }
+                catch(error){
+                    log("code : 17 "+error.message);
+                    reject(false);
+                }
             })) ; 
         },
 

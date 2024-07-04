@@ -2,7 +2,7 @@ var Settings=( function(){
   
   var settingsPanelVisible=false;
   var lockPanelVisible=false;
-  var isUnlock=false;
+  var isUnlock=true;
   var passwordStack="";
   var defaultPassword="00000" 
   var isPasswordDefined=false;
@@ -24,8 +24,18 @@ var Settings=( function(){
       log('handleChannelsAsync ..');
       var isThereLink=await handleChannelsAsync();
       document.addEventListener("keydown",App.keyEventListener);
-      if(isThereLink)
-        initParse(); 
+      if(isThereLink){
+        initParse();
+      }else{
+        var choiceExitYes=document.getElementById("choice-exit-yes");
+        var choiceExitNo=document.getElementById("choice-exit-no");
+        choiceExitYes.onclick=function(){
+          window.tizen.application.getCurrentApplication().exit();
+        }
+        choiceExitNo.onclick=function(){
+          UI.toggleExitPanel();
+        }
+      } 
                
       log('fnished'); 
     }, 
@@ -57,7 +67,7 @@ var Settings=( function(){
         settingsPanel.style.visibility="visible"; 
       }
       else
-        Settings.settingsMessage("There is no permission ! You can try again after unlocking system"  ,5000);  
+        Settings.settingsMessage("您无权限修改，请先解锁"  ,5000);  
     }, 
     toggleVisibleSettingsPanel:function(){  
       if(settingsPanelVisible)
@@ -80,7 +90,7 @@ var Settings=( function(){
         return;   
       var psw= await DB.getPasswordAsync();
       if(psw==defaultPassword){
-        Settings.settingsMessage("There is no defined password ! You can set password from 'Settings'",5000 );  
+        Settings.settingsMessage("未设置锁定密码，您可以在设置页面进行设置",5000 );  
         return;
       }  
       var lockPanel=document.getElementById("lock-panel");
@@ -95,7 +105,7 @@ var Settings=( function(){
         return; 
       if(isUnlock){
         isUnlock=false;
-        this.settingsMessage("<div style='color:green;'>Locked !</div>");  
+        this.settingsMessage("<div style='color:green;'>已锁定!</div>");  
         document.getElementById("lock").classList.remove("unlock"); 
       } 
       else if(lockPanelVisible)
@@ -114,7 +124,7 @@ var Settings=( function(){
         if(psw==passwordStack){
           isUnlock=true;
           Settings.hideLockPanel(); 
-          Settings.settingsMessage("<div style='color:green;'>Unlocked !</div>",5000 );  
+          Settings.settingsMessage("<div style='color:green;'>已解锁!</div>",5000 );  
           document.getElementById("lock").classList.add("unlock"); 
         }
         else
@@ -867,8 +877,8 @@ var Settings=( function(){
   function initParse(){ 
     UI.setCategories(Parser.getCategories());
     Player.next(1);
-    Player.init(App.resolution); 
-    UI.message();  
+    Player.init(App.resolution);
+    UI.message();
   }
 
 }());

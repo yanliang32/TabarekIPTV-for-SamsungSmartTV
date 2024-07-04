@@ -220,7 +220,7 @@ var UI = (function() {
         item = dom.channels.querySelector('li[data-url="' + url + '"]');
         
         if (item) item.classList.add('playing');
-        var message=this.message('Loading "' + item.dataset.name + '"', 600000,true ); 
+        var message=this.message('正在加载 "' + item.dataset.name + '"', 600000,true ); 
       },
       play: function() {
         this.message('Play');
@@ -233,7 +233,7 @@ var UI = (function() {
       },
       buffering: function(state, data) { 
         if (state == 'progress') {
-          this.message('Buffering: ' + data + '%',1000);
+          this.message('缓冲: ' + data + '%',1000);
         } else if (state == 'complete') {
           this.message();
         }
@@ -313,7 +313,7 @@ var UI = (function() {
           divCategoryChannelCount.innerHTML="[&nbsp;&nbsp;"+totalChannelCount+"&nbsp;&nbsp;]";  
 
           if(category.name=="ALL")
-            divName.innerHTML="&bull;&nbsp;&nbsp;ALL&nbsp;&nbsp;&bull;"
+            divName.innerHTML="&bull;&nbsp;&nbsp;所有频道&nbsp;&nbsp;&bull;"
           else
             divName.innerHTML = category.name ;
           
@@ -461,7 +461,7 @@ var UI = (function() {
         var build = document.querySelector('.build');
         var name=selectedChannel.dataset.name ;
         if(name=="ALL")
-          build.innerHTML="&bull;&nbsp;&nbsp;ALL&nbsp;&nbsp;&bull;";
+          build.innerHTML="&bull;&nbsp;&nbsp;所有频道&nbsp;&nbsp;&bull;";
         else  
           build.innerHTML=  name ;
         if(!count){

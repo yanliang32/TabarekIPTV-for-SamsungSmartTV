@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     
-    <title>Tabarek TV</title>
+    <title>IPTV</title>
     <link rel="stylesheet" href="css/style.css"> 
     <!-- Samsung's WebAPI -->
     <script src='$WEBAPIS/webapis/webapis.js'></script>
@@ -37,34 +37,34 @@
 
     <div id="settings-panel"  >
 
-      <button class="tablink" tabindex="-1"  >Home</button>
-      <button class="tablink" tabindex="-1"   >User Control</button>
-      <button class="tablink" tabindex="-1"   >Black List Category</button>
-      <button class="tablink" tabindex="-1"  >Black List Channel</button>
+      <button class="tablink" tabindex="-1"  >主页</button>
+      <button class="tablink" tabindex="-1"   >用户控制</button>
+      <button class="tablink" tabindex="-1"   >分类黑名单</button>
+      <button class="tablink" tabindex="-1"  >频道黑名单</button>
       
       <div id="home" class="tabcontent">
-        <h4 style="text-align: center;">Add Links</h4>
+        <h4 style="text-align: center;">添加地址</h4>
         <div class="links-container">
           <form   onsubmit="event.preventDefault()" accept-charset="utf-8">  
             <table id="links-table" class="table-panel"   cellspacing="10"  cellpadding="10" border="0"  width="100%">
               <tr> 
-                <td width="10%" >Link 1</td>
-                <td width="90%" ><input  type="text" id="link1" ></td> 
+                <td width="10%" >地址 1</td>
+                <td width="90%" ><input type="text" id="link1"></td> 
               </tr>
               <tr> 
-                <td width="10%">Link 2</td>
-                <td width="90%"><input type="text" id="link2" ></td> 
+                <td width="10%">地址 2</td>
+                <td width="90%"><input type="text" id="link2"></td> 
               </tr>
               <tr> 
-                <td width="10%">Link 3</td>
+                <td width="10%">地址 3</td>
                 <td width="90%"><input type="text" id="link3" ></td> 
               </tr>
               <tr> 
-                <td width="10%">Link 4</td>
+                <td width="10%">地址 4</td>
                 <td width="90%"><input type="text" id="link4" ></td> 
               </tr>
               <tr> 
-                <td width="10%">Link 5</td>
+                <td width="10%">地址 5</td>
                 <td width="90%"><input type="text" id="link5" ></td> 
               </tr>
             </table>  
@@ -83,21 +83,21 @@
       </div>
       
       <div id="user-control" class="tabcontent">
-        <h4 style="text-align: center;">Change Password</h4>
+        <h4 style="text-align: center;">修改密码</h4>
         <div class="psw-container">
           <form   onsubmit="event.preventDefault()" accept-charset="utf-8"> 
 
             <table  class="table-panel"   cellspacing="10"  cellpadding="10" border="0"  width="100%">
               <tr> 
-                <td width="25%" >Current Password (Default:00000)</td>
+                <td width="25%" >当前密码 (默认密码:00000)</td>
                 <td width="75%" ><input type="number" id="current-psw" oninput="if(this.value.length>5) this.value='';"></td> 
               </tr>
               <tr> 
-                <td width="25%">New Password</td>
+                <td width="25%">新密码</td>
                 <td width="75%"><input type="number" id="new-psw"  oninput="if(this.value.length>5) this.value='';"></td> 
               </tr>
               <tr> 
-                <td width="25%">Confirm Password</td>
+                <td width="25%">确认密码</td>
                 <td width="75%"><input type="number" id="confirm-psw" oninput="if(this.value.length>5) this.value='';"> </td> 
               </tr>
             </table>    
@@ -115,7 +115,7 @@
       
       <div id="blacklist-category" class="tabcontent">
 
-        <h4 style="text-align: center;">Add Black List Category</h4>
+        <h4 style="text-align: center;">添加分类黑名单</h4>
         
         <div class="blacklist-category-container"> 
           <form onsubmit="event.preventDefault()" style="height: 100%;" accept-charset="utf-8" >
@@ -123,7 +123,7 @@
             <table cellspacing="10" cellpadding="0" border="0" width="100%" >
               <tr style="color:#ffff00;">
                 <th class="blacklist-category-number-th"></th> 
-                <th class="blacklist-category-name-th">Category Name</th> 
+                <th class="blacklist-category-name-th">分类名称</th> 
                 <th class="blacklist-category-delete-th"></th> 
               </tr>
             </table>
@@ -162,7 +162,7 @@
       
       <div id="blacklist-channel" class="tabcontent"> 
 
-        <h4 style="text-align: center;"> Add Black List Channel</h4>
+        <h4 style="text-align: center;"> 添加频道黑名单</h4>
 
         <div class="blacklist-channel-container"  >
           <form  onsubmit="event.preventDefault()" style="height: 100%;"  accept-charset="utf-8">  
@@ -170,8 +170,8 @@
             <table cellspacing="10" cellpadding="0" border="0" width="100%" >
               <tr style="color:#ffff00; ">
                 <th class="blacklist-channel-number-th"></th> 
-                <th class="blacklist-channel-name-th">Channel Name</th> 
-                <th class="blacklist-channel-url-th">URL</th>
+                <th class="blacklist-channel-name-th">频道名称</th> 
+                <th class="blacklist-channel-url-th">频道地址</th>
                 <th class="blacklist-channel-delete-th"></th>
               </tr>
             </table>
@@ -214,9 +214,9 @@
 
 
      
-    
+    <div id="cursor" class="hide"></div>
     <div id="header" class="header">
-      <h1>Tabarek TV</h1>
+      <h1>电视直播</h1>
       <div class="top-channel-info">
         <div class="build"></div> 
         <div id="channel-count"></div>
@@ -238,9 +238,9 @@
 
     <div id="choice-panel" class="choice-panel">
       <div id="choice-exit" class="choice-exit hide">
-        <div class="choice-message">Are you sure you want to exit TabarekTV&nbsp;?</div>
-        <button id="choice-exit-yes" tabindex="-1" class="button-syle-2 choice-exit-buttton selected">Yes</button>
-        <button id="choice-exit-no" tabindex="-1" class="button-syle-2 choice-exit-buttton">No</button>
+        <div class="choice-message">确定要退出IPTV吗&nbsp;?</div>
+        <button id="choice-exit-yes" tabindex="-1" class="button-syle-2 choice-exit-buttton selected">退出</button>
+        <button id="choice-exit-no" tabindex="-1" class="button-syle-2 choice-exit-buttton">取消</button>
       </div> 
     </div>
 
@@ -253,17 +253,15 @@
       </div>
       <div id="info" class="info"></div> 
       <div class="screen"> 
-         
         <object id='av-player' type='application/avplayer'></object>  
       </div>
-      
     </div>   
 
-    <div id="cursor" class="hide"></div>
+    
     <div id="log" class="hide"></div> 
    	<div id="number-key-panel" class="hide"></div>
     <div id="lock-panel"   class="hide" >
-      <div style="font-size:1.5em;padding: 0.4em;margin-bottom: 0.5em; ">Please type password and unlock: </div>
+      <div style="font-size:1.5em;padding: 0.4em;margin-bottom: 0.5em; ">请输入解锁密码: </div>
       <div id="password"  ></div> 
     </div>
     
@@ -272,7 +270,7 @@
    	<div id="bottom-channel-info" class="hide"> 
    		<div id="bottom-channel-info-number">-</div>
    		<div id="bottom-channel-info-right">
-   			<div id="bottom-channel-info-name">No Playing Channel..</div> 
+   			<div id="bottom-channel-info-name">没有可播放频道..</div> 
    			<div id="player-time-control">
    				<div id="elapsed-time" class="elapsed-time">00:00:00</div>
 	      		<div class="slider-bar-panel">

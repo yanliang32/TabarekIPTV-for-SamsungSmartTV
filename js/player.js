@@ -106,11 +106,13 @@ var Player = (function() {
       Player.setBottomChannelInfo();
       Player.showBottomChannelInfo();
       webapis.avplay.stop();
-      webapis.avplay.close();  
+      webapis.avplay.close();
       webapis.avplay.open(url);
+      webapis.avplay.setBufferingParam("PLAYER_BUFFER_FOR_PLAY","PLAYER_BUFFER_SIZE_IN_SECOND", 1);
+      //webapis.avplay.setStreamingProperty('SET_MODE_4K', 'true');
       UI.playing(url); 
       playerUrl=url;  
-      webapis.avplay.prepareAsync(function() {   
+      webapis.avplay.prepareAsync(function() {
         webapis.avplay.play();  
       });
     },
@@ -238,8 +240,10 @@ var Player = (function() {
       Player.setBottomChannelInfo(); 
       Player.showBottomChannelInfo() ; 
       webapis.avplay.stop();
-      //webapis.avplay.close();   
-      webapis.avplay.open(url);    
+      //webapis.avplay.close(); 
+      webapis.avplay.open(url);   
+      webapis.avplay.setBufferingParam("PLAYER_BUFFER_FOR_PLAY","PLAYER_BUFFER_SIZE_IN_SECOND", 1);
+      //webapis.avplay.setStreamingProperty('SET_MODE_4K', 'true');
       webapis.avplay.prepareAsync(function() {  
         log("Statrt Prepare : ", url);
         webapis.avplay.play(); 
